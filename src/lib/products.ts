@@ -82,11 +82,13 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
 
 // Get related products (same category, excluding current product)
 export async function getRelatedProducts(productId: string, limit = 4): Promise<Product[]> {
+  // Using created_at for consistent ordering instead of RANDOM()
+  // This avoids the performance hit of ORDER BY RANDOM() which is very inefficient for large datasets
   const products = await query<any>(
     `SELECT * FROM products 
      WHERE category = (SELECT category FROM products WHERE id = $1) 
      AND id != $1
-     ORDER BY RANDOM()
+     ORDER BY created_at DESC
      LIMIT $2`,
     [productId, limit]
   );

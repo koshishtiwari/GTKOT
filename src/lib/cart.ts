@@ -46,9 +46,10 @@ export async function addToCart(cartId: string, productId: string, quantity: num
     if (!product) throw new Error('Product not found');
     if (product.inventory < quantity) throw new Error('Not enough inventory');
     
-    // Check if item already exists in cart
+    // Use FOR UPDATE to lock the row during the transaction
+    // This prevents race conditions when multiple requests modify the same cart item
     const existingItem = await queryOne<CartItem>(
-      'SELECT * FROM cart_items WHERE cart_id = $1 AND product_id = $2',
+      'SELECT * FROM cart_items WHERE cart_id = $1 AND product_id = $2 FOR UPDATE',
       [cartId, productId],
       client
     );
@@ -63,11 +64,14 @@ export async function addToCart(cartId: string, productId: string, quantity: num
     } else {
       // Add new item if it doesn't exist
       await client.query(
-        `INSERT INTO cart_items (cart_id, product_id, quantity, price, name, image) 
-         VALUES ($1, $2, $3, $4, $5, $6)`,
-        [cartId, productId, quantity, product.price, product.name, product.images[0]]
+        `INSERT INTO cart_items (cart_id, product_id, quantity, price, name, image, slug) 
+         VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+        [cartId, productId, quantity, product.price, product.name, product.images[0], product.slug]
       );
     }
+    
+    // Also lock the cart record to prevent concurrent modifications
+    await client.query('SELECT * FROM carts WHERE id = $1 FOR UPDATE', [cartId]);
     
     // Recalculate cart subtotal
     const items = await query<CartItem>(

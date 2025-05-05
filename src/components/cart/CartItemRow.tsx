@@ -95,7 +95,7 @@ export default function CartItemRow({ item }: CartItemRowProps) {
         <div className="flex justify-between">
           <div>
             <Link 
-              href={`/products/${item.productId}`}
+              href={`/products/${item.slug || item.productId}`}
               className="text-lg font-medium text-gray-900 hover:text-blue-600"
             >
               {item.name}

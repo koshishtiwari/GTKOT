@@ -4,6 +4,7 @@ export interface CartItem {
   price: number;
   name: string;
   image: string;
+  slug: string; // Add slug for proper navigation
 }
 
 export interface Cart {

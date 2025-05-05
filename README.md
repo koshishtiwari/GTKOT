@@ -1,4 +1,4 @@
-# GTKOT - Minimal High-Performance E-commerce
+# Momo - Minimal High-Performance E-commerce
 
 A lightweight, high-performance e-commerce platform built with Next.js and TypeScript. This application focuses on minimal dependencies, optimized performance, and a great user experience.
 
@@ -60,8 +60,8 @@ A lightweight, high-performance e-commerce platform built with Next.js and TypeS
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/gtkot.git
-cd gtkot
+git clone https://github.com/yourusername/momo.git
+cd momo
 ```
 
 2. Install dependencies:
@@ -75,11 +75,11 @@ npm install
 Create a `.env.local` file in the root directory:
 
 ```env
-POSTGRES_USER=gtkot
-POSTGRES_PASSWORD=gtkot_password
+POSTGRES_USER=momo
+POSTGRES_PASSWORD=momo_password
 POSTGRES_HOST=localhost
 POSTGRES_PORT=5432
-POSTGRES_DATABASE=gtkot_db
+POSTGRES_DATABASE=momo_db
 ```
 
 4. Start the PostgreSQL database:
